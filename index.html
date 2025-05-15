@@ -29,39 +29,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Tidak ada perubahan pada event listener untuk download template
+            // Kode JavaScript Anda di sini
         });
 
         function prosesFile() {
-            const fileInput = document.getElementById('fileUpload');
-            const file = fileInput.files[0];
-            const hasilDiv = document.getElementById('hasil');
-            const dataXLSXPre = document.getElementById('dataXLSX');
-
-            if (file) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-                    console.log("Data dari XLSX:", jsonData);
-                    dataXLSXPre.textContent = JSON.stringify(jsonData, null, 2);
-                    hasilDiv.style.display = 'block';
-                };
-
-                reader.onerror = function(error) {
-                    console.error("Terjadi kesalahan saat membaca file:", error);
-                    alert("Terjadi kesalahan saat membaca file XLSX.");
-                };
-
-                reader.readAsArrayBuffer(file);
-            } else {
-                alert("Pilih file XLSX terlebih dahulu.");
-            }
+            // Kode fungsi prosesFile Anda di sini
         }
     </script>
 </body>
