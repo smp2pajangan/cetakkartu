@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pembuat Kartu Ujian</title>
+    <script src="https://unpkg.com/xlsx/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Pembuat Kartu Ujian</h1>
+
+    <div>
+        <a href="https://drive.google.com/uc?export=download&id=1ffhfPpQlKsuRgmXXB38q6HWM9KWsTAg3" id="downloadTemplate">Unduh Template XLSX</a>
+    </div>
+
+    <hr>
+
+    <div>
+        <label for="fileUpload">Unggah File XLSX yang Sudah Diisi:</label>
+        <input type="file" id="fileUpload" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+    </div>
+
+    <div>
+        <button onclick="prosesFile()">Proses</button>
+    </div>
+
+    <div id="hasil" style="display:none;">
+        <h2>Data dari File XLSX:</h2>
+        <pre><code id="dataXLSX"></code></pre>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tidak ada perubahan pada event listener untuk download template
+        });
+
+        function prosesFile() {
+            const fileInput = document.getElementById('fileUpload');
+            const file = fileInput.files[0];
+            const hasilDiv = document.getElementById('hasil');
+            const dataXLSXPre = document.getElementById('dataXLSX');
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                    console.log("Data dari XLSX:", jsonData);
+                    dataXLSXPre.textContent = JSON.stringify(jsonData, null, 2);
+                    hasilDiv.style.display = 'block';
+                };
+
+                reader.onerror = function(error) {
+                    console.error("Terjadi kesalahan saat membaca file:", error);
+                    alert("Terjadi kesalahan saat membaca file XLSX.");
+                };
+
+                reader.readAsArrayBuffer(file);
+            } else {
+                alert("Pilih file XLSX terlebih dahulu.");
+            }
+        }
+    </script>
+</body>
+</html>
